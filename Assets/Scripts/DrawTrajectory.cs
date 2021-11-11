@@ -27,9 +27,11 @@ public class DrawTrajectory : MonoBehaviour
     {
         Vector3 velocity = (forceVector / rigidBody.mass) * Time.fixedDeltaTime;
 
-        float FlightDuration = (2 * velocity.y) / Physics.gravity.y;
+        float FlightDurationToGround = Mathf.Sqrt((velocity.y * velocity.y) / (Physics.gravity.y * Physics.gravity.y) - (2 * startingPoint.y / Physics.gravity.y));
 
-        float stepTime = FlightDuration / lineSegmentCount;
+        float FlightDuration = ((2 * velocity.y) / Physics.gravity.y) + FlightDurationToGround;
+
+        float stepTime = (FlightDuration / lineSegmentCount);
 
         linePoints.Clear();
 
@@ -43,16 +45,39 @@ public class DrawTrajectory : MonoBehaviour
                 velocity.z * stepTimePassed);
 
             RaycastHit hit;
+
             if (Physics.Raycast(startingPoint, -MovementVector, out hit, MovementVector.magnitude))
+            {
                 break;
+            }
 
             linePoints.Add(-MovementVector + startingPoint);
         }
 
+        Vector3 secondBouncingStartPoint = linePoints[linePoints.Count-1];
+        /////// SECOND BOUNCING
+
+        for (int i = 0; i < lineSegmentCount; i++)
+        {
+            float stepTimePassed = stepTime * i;
+
+            Vector3 MovementVector = new Vector3(
+                velocity.x * stepTimePassed,
+                velocity.y * stepTimePassed - 0.5f * Physics.gravity.y * stepTimePassed * stepTimePassed,
+                velocity.z * stepTimePassed);
+
+            RaycastHit hit;
+
+            if (Physics.Raycast(secondBouncingStartPoint, -MovementVector, out hit, MovementVector.magnitude))
+            {
+                break;
+            }
+
+            linePoints.Add(-MovementVector + secondBouncingStartPoint);
+        }
         lineRenderer.positionCount = linePoints.Count;
         lineRenderer.SetPositions(linePoints.ToArray());
     }
-
     public void HideLine()
     {
         lineRenderer.positionCount = 0;

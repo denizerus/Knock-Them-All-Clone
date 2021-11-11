@@ -4,51 +4,48 @@ using UnityEngine;
 
 public class DragAndShoot : MonoBehaviour
 {
-
     private Vector3 mousePressDownPos;
     private Vector3 mouseReleasePos;
 
     private Rigidbody rb;
+    
+    private float force = 2f;
 
     private bool isShoot;
-
-    private float forceMultiplier = 2f;
 
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        //     Debug.Log("start");
     }
-    
-        private void Update()
+
+    private void Update()
+    {
+        if (Input.GetButtonDown("Fire1"))
         {
-            if (Input.GetButtonDown("Fire1"))
+            mousePressDownPos = Input.mousePosition;
+        }
+
+        if (Input.GetButtonUp("Fire1"))
+        {
+            DrawTrajectory.Instance.HideLine();
+            DoMouseUpFuntions();
+        }
+
+        if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Moved)
+        {
+
+            Vector3 forceInit = (Input.mousePosition - mousePressDownPos);
+            Vector3 forceV = (new Vector3(forceInit.x, forceInit.y, forceInit.y)) * force;
+
+            Debug.Log("forceV: " + forceV);
+
+            if (!isShoot)
             {
-                mousePressDownPos = Input.mousePosition;
-            }
-
-            if (Input.GetButtonUp("Fire1"))
-            {
-                DrawTrajectory.Instance.HideLine();
-                //     Debug.Log("onmouseup" + Input.mousePosition);
-                mouseReleasePos = Input.mousePosition;
-                Shoot(mousePressDownPos - mouseReleasePos);
-            }
-
-            if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Moved)
-            {
-                Debug.Log("calisti");
-
-                Vector3 forceInit = (Input.mousePosition - mousePressDownPos);
-                Vector3 forceV = (new Vector3(forceInit.x, forceInit.y, forceInit.y)) * forceMultiplier;
-
-                if (!isShoot)
-                {
-                    DrawTrajectory.Instance.UpdateTrajectory(forceV, rb, transform.position);
-                }
+                DrawTrajectory.Instance.UpdateTrajectory(forceV, rb, transform.position);
             }
         }
+    }
 
     private void OnMouseDown()
     {
@@ -58,18 +55,29 @@ public class DragAndShoot : MonoBehaviour
     private void OnMouseUp()
     {
         DrawTrajectory.Instance.HideLine();
-        //     Debug.Log("onmouseup" + Input.mousePosition);
+        DoMouseUpFuntions();
+    }
+
+    void DoMouseUpFuntions()
+    {
+        Vector3 vectorF;
+        vectorF = new Vector3();
         mouseReleasePos = Input.mousePosition;
-        Shoot(mousePressDownPos - mouseReleasePos);
+        if (mousePressDownPos.y - mouseReleasePos.y > 0)
+            vectorF = mousePressDownPos - mouseReleasePos;
+        else if (mousePressDownPos.y - mouseReleasePos.y <= 0)
+            vectorF = mouseReleasePos- mousePressDownPos;
+
+        Shoot(vectorF);
     }
 
 
     private void OnMouseDrag()
     {
-        Debug.Log("onmousedrag calisti");
-
         Vector3 forceInit = (Input.mousePosition - mousePressDownPos);
-        Vector3 forceV = (new Vector3(forceInit.x, forceInit.y, forceInit.y)) * forceMultiplier;
+        Vector3 forceV = (new Vector3(forceInit.x, forceInit.y, forceInit.y)) * force;
+
+        //Debug.Log("forceV: " + forceV);
 
         if (!isShoot)
         {
@@ -78,17 +86,13 @@ public class DragAndShoot : MonoBehaviour
     }
 
 
-
-
-    void Shoot(Vector3 Force)
+    public void Shoot(Vector3 Force)
     {
-        //    Debug.Log("shoot 1");
         if (isShoot)
             return;
-        //  Debug.Log("shoot 2");
         rb.useGravity = true;
-        rb.AddForce(new Vector3(Force.x, Force.y, Force.y) * forceMultiplier);
+        rb.AddForce(new Vector3(Force.x, Force.y, Force.y) * force);
         isShoot = true;
-        //Debug.Log("shoot 3");
+        GameManager.Instance.NewSpawnRequest();
     }
 }

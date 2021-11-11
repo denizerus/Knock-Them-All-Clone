@@ -13,11 +13,11 @@ GameObject:
   - component: {fileID: 5256988095320759723}
   - component: {fileID: 6857790920523250432}
   - component: {fileID: 4871607382322352129}
-  - component: {fileID: -587432034622619889}
   - component: {fileID: -6709709230601929165}
-  m_Layer: 0
+  - component: {fileID: 3986724740312168381}
+  m_Layer: 8
   m_Name: Ball
-  m_TagString: Untagged
+  m_TagString: Ball
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -112,18 +112,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &-587432034622619889
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 791374244578387573}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cc432a894c361dd468a3161514c8e840, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &-6709709230601929165
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -136,3 +124,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16bf124e0079356428320146afd655d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &3986724740312168381
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 791374244578387573}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc432a894c361dd468a3161514c8e840, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  force: 2

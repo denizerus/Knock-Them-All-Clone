@@ -6,15 +6,29 @@ public class GameManager : MonoBehaviour
 {
     public Transform BallSpawnPoint;
     public GameObject Ball;
+    private float newSpawnDuration = 1.0f;
 
+    #region Singleton
+
+    public static GameManager Instance;
+
+    private void Awake()
+    {
+        Instance = this;
+    }
+    #endregion
     void Start()
     {
-        Instantiate(Ball, BallSpawnPoint);
+        SpawnNewBall();
     }
     
-    void Update()
+    void SpawnNewBall()
     {
-
+        Instantiate(Ball, BallSpawnPoint.position, Quaternion.identity);
     }
 
+    public void NewSpawnRequest()
+    {
+        Invoke("SpawnNewBall", newSpawnDuration);
+    }
 }
