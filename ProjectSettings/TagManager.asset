@@ -5,6 +5,13 @@ TagManager:
   serializedVersion: 2
   tags:
   - Obstacle
+  - Ball
+  - Text
+  - Text2
+  - Text3
+  - Text4
+  - Text5
+  - Text6
   layers:
   - Default
   - TransparentFX
