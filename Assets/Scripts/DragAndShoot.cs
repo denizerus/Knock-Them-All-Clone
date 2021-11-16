@@ -15,7 +15,7 @@ public class DragAndShoot : MonoBehaviour
 
     private Rigidbody rb;
 
-    private float force = 65f;
+    private float force = 2f;
 
     private bool isShoot;
 
@@ -81,7 +81,7 @@ public class DragAndShoot : MonoBehaviour
             case TouchPhase.Began:
                 gameObject.GetComponent<MeshRenderer>().enabled = true;
                 testText.text = "Nfire 1";
-                Debug.Log("PHASE 1");
+            //    Debug.Log("PHASE 1");
                 mousePressDownPos = Input.mousePosition;
                 anim.SetBool("isThrow", true);
                 anim.SetBool("isStandToCover", false);
@@ -89,11 +89,11 @@ public class DragAndShoot : MonoBehaviour
                 break;
             case TouchPhase.Moved:
                 testText2.text = "NtouchC2";
-                Debug.Log("PHASE 2");
+             //   Debug.Log("PHASE 2");
                 Vector3 forceInit = (Input.mousePosition - mousePressDownPos);
                 Vector3 forceV = (new Vector3(forceInit.x, forceInit.y, forceInit.y)) * force;
 
-                Debug.Log("forceV: " + forceV);
+            //    Debug.Log("forceV: " + forceV);
 
                 if (!isShoot)
                 {
@@ -102,7 +102,7 @@ public class DragAndShoot : MonoBehaviour
                 break;
             case TouchPhase.Ended:
                 testText3.text = "fire3";
-                Debug.Log("PHASE 3");
+         //       Debug.Log("PHASE 3");
                 anim.SetBool("isThrow", false);
                 anim.SetBool("isStandToCover", true);
                 StartCoroutine(GameObject.FindGameObjectWithTag("Player").GetComponent<MoveToCorrectPlace>().MoveChar(coverPos));
@@ -187,13 +187,19 @@ public class DragAndShoot : MonoBehaviour
 
     void DoMouseUpFuntions()
     {
-        Vector3 vectorF;
-        vectorF = new Vector3();
+        Vector3 vectorF = new Vector3();
         mouseReleasePos = Input.mousePosition;
-        if (mousePressDownPos.y - mouseReleasePos.y > 0)
-            vectorF = mousePressDownPos - mouseReleasePos;
-        else if (mousePressDownPos.y - mouseReleasePos.y <= 0)
+
+        if (mousePressDownPos.y - mouseReleasePos.y <= 0)
+        {
+            Debug.Log("Küçüktür");
             vectorF = mouseReleasePos - mousePressDownPos;
+        }
+        else if (mousePressDownPos.y - mouseReleasePos.y > 0)
+        {
+            Debug.Log("Büyüktür");
+            vectorF = mousePressDownPos - mouseReleasePos;
+        }
 
         Shoot(vectorF);
     }
@@ -202,6 +208,8 @@ public class DragAndShoot : MonoBehaviour
     {
         if (isShoot)
             return;
+        Ball ballScript = GetComponent<Ball>();
+        ballScript.isUsable = false;
         rb.useGravity = true;
         rb.AddForce(new Vector3(Force.x, Force.y, Force.y) * force);
         isShoot = true;

@@ -29,13 +29,12 @@ public class DrawTrajectory : MonoBehaviour
 
         float FlightDurationToGround = Mathf.Sqrt((velocity.y * velocity.y) / (Physics.gravity.y * Physics.gravity.y) - (2 * startingPoint.y / Physics.gravity.y));
 
-        float FlightDuration = ((2 * velocity.y) / Physics.gravity.y) + FlightDurationToGround;
+        float FlightDuration = ((2 * velocity.y) / Physics.gravity.y)-  FlightDurationToGround;
 
         float stepTime = (FlightDuration / lineSegmentCount);
-
         linePoints.Clear();
 
-        for (int i = 0; i < lineSegmentCount; i++)
+        for (int i = 0; i <= lineSegmentCount; i++)
         {
             float stepTimePassed = stepTime * i;
 

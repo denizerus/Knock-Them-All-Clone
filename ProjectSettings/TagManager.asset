@@ -12,6 +12,8 @@ TagManager:
   - Text4
   - Text5
   - Text6
+  - Enemy
+  - LevelManager
   layers:
   - Default
   - TransparentFX

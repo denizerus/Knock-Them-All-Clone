@@ -6,7 +6,7 @@ public class GameManager : MonoBehaviour
 {
     public Transform BallSpawnPoint;
     public GameObject Ball;
-    private float newSpawnDuration = 1.0f;
+    private float newSpawnDuration = 0.5f;
 
     #region Singleton
 
@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour
     
     void SpawnNewBall()
     {
-        Instantiate(Ball, BallSpawnPoint.position, Quaternion.identity);
+        var ball = Instantiate(Ball, BallSpawnPoint.position, Quaternion.identity);
     }
 
     public void NewSpawnRequest()
