@@ -13,6 +13,7 @@ public class LevelManager : MonoBehaviour
     private float newLevelRequestTime = 1f;
 
     private Text TextEnemy;
+    private Text TextLevel;
 
     // Start is called before the first frame update
     void Start()
@@ -21,6 +22,14 @@ public class LevelManager : MonoBehaviour
         isLevelCreated = false;
         numOfEnemy = 0;
         GenerateNewLevel();
+
+        if (!PlayerPrefs.HasKey("NumOfLevel")) 
+        {
+            PlayerPrefs.SetInt("NumOfLevel", 1);
+        }
+
+        TextLevel = GameObject.FindGameObjectWithTag("Text5").GetComponent<Text>();
+        TextLevel.text = "Level " + PlayerPrefs.GetInt("NumOfLevel").ToString();
     }
 
     private void GenerateNewLevel()
@@ -78,6 +87,8 @@ public class LevelManager : MonoBehaviour
             }
             Debug.Log("LEVEL BİTTİ YENİ LEVEL!!!");
             isLevelCreated = false;
+            PlayerPrefs.SetInt("NumOfLevel", PlayerPrefs.GetInt("NumOfLevel") + 1);
+            TextLevel.text = "Level " + PlayerPrefs.GetInt("NumOfLevel").ToString();
             StartCoroutine(NewLevelRequest());
         }
     }
@@ -85,6 +96,7 @@ public class LevelManager : MonoBehaviour
     public IEnumerator NewLevelRequest()
     {
         yield return new WaitForSeconds(newLevelRequestTime);
+
         GenerateNewLevel();
     }
 }
