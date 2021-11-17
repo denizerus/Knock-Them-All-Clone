@@ -10,7 +10,7 @@ public class LevelManager : MonoBehaviour
     public GameObject[] enemyPrefab;
     public int numOfEnemy;
     public bool isLevelCreated;
-    private float newLevelRequestTime = 1f;
+    private float newLevelRequestTime = 5f;
 
     private Text TextEnemy;
     private Text TextLevel;
@@ -23,7 +23,7 @@ public class LevelManager : MonoBehaviour
         numOfEnemy = 0;
         GenerateNewLevel();
 
-        if (!PlayerPrefs.HasKey("NumOfLevel")) 
+        if (!PlayerPrefs.HasKey("NumOfLevel"))
         {
             PlayerPrefs.SetInt("NumOfLevel", 1);
         }
@@ -39,7 +39,7 @@ public class LevelManager : MonoBehaviour
         {
             int randomPrefab = Random.Range(0, 4);
 
-            if(randomPrefab != 3)
+            if (randomPrefab != 3)
             {
                 numOfEnemy++;
                 newCubes = Instantiate(enemyPrefab[randomPrefab],
@@ -72,19 +72,6 @@ public class LevelManager : MonoBehaviour
         TextEnemy.text = "Enemy: " + numOfEnemy.ToString();
         if (numOfEnemy == 0 && isLevelCreated)
         {
-            foreach (Transform child in gameObject.transform)
-            {
-                GameObject.Destroy(child.gameObject);
-            }
-            GameObject[] balls = GameObject.FindGameObjectsWithTag("Ball");
-
-            foreach(GameObject ball in balls)
-            {
-                if (ball.GetComponent<Ball>().isUsable == false)
-                {
-                    Destroy(ball);
-                }
-            }
             Debug.Log("LEVEL BİTTİ YENİ LEVEL!!!");
             isLevelCreated = false;
             PlayerPrefs.SetInt("NumOfLevel", PlayerPrefs.GetInt("NumOfLevel") + 1);
@@ -96,7 +83,19 @@ public class LevelManager : MonoBehaviour
     public IEnumerator NewLevelRequest()
     {
         yield return new WaitForSeconds(newLevelRequestTime);
+        foreach (Transform child in gameObject.transform)
+        {
+            GameObject.Destroy(child.gameObject);
+        }
+        GameObject[] balls = GameObject.FindGameObjectsWithTag("Ball");
 
+        foreach (GameObject ball in balls)
+        {
+            if (ball.GetComponent<Ball>().isUsable == false)
+            {
+                Destroy(ball);
+            }
+        }
         GenerateNewLevel();
     }
 }

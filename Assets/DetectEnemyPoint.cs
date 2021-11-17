@@ -12,11 +12,10 @@ public class DetectEnemyPoint : MonoBehaviour
         {
             gameObject.GetComponent<BoxCollider>().enabled = false;
             GameObject.FindGameObjectWithTag("LevelManager").GetComponent<LevelManager>().numOfEnemy--;
-
-
-
+            EnemyThrowBall etb = gameObject.transform.parent.gameObject.transform.Find("EnemyModel").GetComponent<EnemyThrowBall>();
+            etb.StopAllCoroutines();
+            etb.enabled = false;
         }
-
     }
 
     private void OnTriggerEnter(Collider other)

@@ -12,6 +12,7 @@ public class DragAndShoot : MonoBehaviour
     public Transform throwPos;
     public Transform coverPos;
 
+    private SphereCollider sc;
 
     private Rigidbody rb;
 
@@ -46,6 +47,7 @@ public class DragAndShoot : MonoBehaviour
         testText5 = GameObject.FindGameObjectWithTag("Text5").GetComponent<Text>();
         testText6 = GameObject.FindGameObjectWithTag("Text6").GetComponent<Text>();
         rb = GetComponent<Rigidbody>();
+        sc = GetComponent<SphereCollider>();
     }
 
     void Update()
@@ -210,6 +212,7 @@ public class DragAndShoot : MonoBehaviour
             return;
         Ball ballScript = GetComponent<Ball>();
         ballScript.isUsable = false;
+        sc.enabled = true;
         rb.useGravity = true;
         rb.AddForce(new Vector3(Force.x, Force.y, Force.y) * force);
         isShoot = true;

@@ -15,7 +15,6 @@ public class Ball : MonoBehaviour
         isUsable = true;
     }
 
-
     private void OnCollisionEnter(Collision other)
     {
         KnockBack();
