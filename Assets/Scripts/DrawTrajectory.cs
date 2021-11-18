@@ -10,11 +10,18 @@ public class DrawTrajectory : MonoBehaviour
     [SerializeField]
     public int lineSegmentCount = 20;
 
+    public Material redMaterial, greenMaterial;
+
     private List<Vector3> linePoints = new List<Vector3>();
 
     #region Singleton
 
     public static DrawTrajectory Instance;
+
+    private void Start()
+    {
+        lineRenderer.material = redMaterial;
+    }
 
     private void Awake()
     {
@@ -29,7 +36,7 @@ public class DrawTrajectory : MonoBehaviour
 
         float FlightDurationToGround = Mathf.Sqrt((velocity.y * velocity.y) / (Physics.gravity.y * Physics.gravity.y) - (2 * startingPoint.y / Physics.gravity.y));
 
-        float FlightDuration = ((2 * velocity.y) / Physics.gravity.y) + FlightDurationToGround;
+        float FlightDuration = ((2 * velocity.y) / Physics.gravity.y) - FlightDurationToGround;
 
         float stepTime = (FlightDuration / lineSegmentCount);
         linePoints.Clear();
@@ -45,11 +52,19 @@ public class DrawTrajectory : MonoBehaviour
 
             RaycastHit hit;
 
+
             if (Physics.Raycast(startingPoint, -MovementVector, out hit, MovementVector.magnitude))
             {
+                if(hit.collider.name == "Plane")
+                {
+                    lineRenderer.material = redMaterial;
+                }
+                else if(hit.collider.name != "Plane")
+                {
+                    lineRenderer.material = greenMaterial;
+                }
                 break;
             }
-
             linePoints.Add(-MovementVector + startingPoint);
         }
 
@@ -69,6 +84,14 @@ public class DrawTrajectory : MonoBehaviour
 
             if (Physics.Raycast(secondBouncingStartPoint, -MovementVector, out hit, MovementVector.magnitude))
             {
+                if (hit.collider.name == "Plane")
+                {
+                    lineRenderer.material = redMaterial;
+                }
+                else if (hit.collider.name != "Plane")
+                {
+                    lineRenderer.material = greenMaterial;
+                }
                 break;
             }
 

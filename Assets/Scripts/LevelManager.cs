@@ -44,6 +44,7 @@ public class LevelManager : MonoBehaviour
         if (numOfEnemy == 0 && isLevelCreated)
         {
             winPanel.SetActive(true);
+            GameObject.FindGameObjectWithTag("PlayerHitBox").GetComponent<EnemyHitsPlayer>().gameContinue = false;
             particleConfetti.Play();
 
             if (animatorWin != null)
@@ -84,6 +85,7 @@ public class LevelManager : MonoBehaviour
     {
         numOfEnemy = 0;
         particleConfetti.Stop();
+        GameObject.FindGameObjectWithTag("PlayerHitBox").GetComponent<EnemyHitsPlayer>().gameContinue = true;
         winPanel.SetActive(false);
         losePanel.SetActive(false);
         GameObject.FindGameObjectWithTag("PlayerHitBox").GetComponent<EnemyHitsPlayer>().gameContinue = true;
