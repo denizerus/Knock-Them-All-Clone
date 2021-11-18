@@ -8,44 +8,38 @@ public class DragAndShoot : MonoBehaviour
     private Vector3 mousePressDownPos;
     private Vector3 mouseReleasePos;
 
-
     public Transform throwPos;
+
     public Transform coverPos;
 
     private SphereCollider sc;
 
     private Rigidbody rb;
 
-    private float force = 2f;
+    private float force;
 
     private bool isShoot;
-
-    public Text testText;
-
-    public Text testText2;
-
-    public Text testText3;
 
     public Text testText4;
 
     public Text testText5;
 
-    public Text testText6;
-
     Animator anim;
 
-    // Start is called before the first frame update
     void Start()
     {
+#if UNITY_ANDROID
+        force = 1f;
+#endif
+
+#if UNITY_EDITOR
+        force = 3f;
+#endif
         coverPos = GameObject.Find("GameCharCoverPos").transform;
         throwPos = GameObject.Find("GameCharThrowPos").transform;
         anim = GameObject.FindGameObjectWithTag("Player").GetComponent<Animator>();
-        testText = GameObject.FindGameObjectWithTag("Text").GetComponent<Text>();
-        testText2 = GameObject.FindGameObjectWithTag("Text2").GetComponent<Text>();
-        testText3 = GameObject.FindGameObjectWithTag("Text3").GetComponent<Text>();
         testText4 = GameObject.FindGameObjectWithTag("Text4").GetComponent<Text>();
         testText5 = GameObject.FindGameObjectWithTag("Text5").GetComponent<Text>();
-        testText6 = GameObject.FindGameObjectWithTag("Text6").GetComponent<Text>();
         rb = GetComponent<Rigidbody>();
         sc = GetComponent<SphereCollider>();
     }
@@ -82,29 +76,20 @@ public class DragAndShoot : MonoBehaviour
         {
             case TouchPhase.Began:
                 gameObject.GetComponent<MeshRenderer>().enabled = true;
-                testText.text = "Nfire 1";
-            //    Debug.Log("PHASE 1");
                 mousePressDownPos = Input.mousePosition;
                 anim.SetBool("isThrow", true);
                 anim.SetBool("isStandToCover", false);
                 StartCoroutine(GameObject.FindGameObjectWithTag("Player").GetComponent<MoveToCorrectPlace>().MoveChar(throwPos));
                 break;
             case TouchPhase.Moved:
-                testText2.text = "NtouchC2";
-             //   Debug.Log("PHASE 2");
                 Vector3 forceInit = (Input.mousePosition - mousePressDownPos);
                 Vector3 forceV = (new Vector3(forceInit.x, forceInit.y, forceInit.y)) * force;
-
-            //    Debug.Log("forceV: " + forceV);
-
                 if (!isShoot)
                 {
                     DrawTrajectory.Instance.UpdateTrajectory(forceV, rb, transform.position);
                 }
                 break;
             case TouchPhase.Ended:
-                testText3.text = "fire3";
-         //       Debug.Log("PHASE 3");
                 anim.SetBool("isThrow", false);
                 anim.SetBool("isStandToCover", true);
                 StartCoroutine(GameObject.FindGameObjectWithTag("Player").GetComponent<MoveToCorrectPlace>().MoveChar(coverPos));
@@ -113,80 +98,6 @@ public class DragAndShoot : MonoBehaviour
                 break;
         }
     }
-
-
-
-    /*
-    private void Update()
-    {
-        if (Input.GetButtonDown("Fire1"))
-        {
-            testText.text = "fire 1";
-            Debug.Log("PHASE 1");
-            mousePressDownPos = Input.mousePosition;
-        }
-
-        if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Moved)
-        {
-            testText2.text = "touchC2";
-            Debug.Log("PHASE 2");
-            Vector3 forceInit = (Input.mousePosition - mousePressDownPos);
-            Vector3 forceV = (new Vector3(forceInit.x, forceInit.y, forceInit.y)) * force;
-
-            Debug.Log("forceV: " + forceV);
-
-            if (!isShoot)
-            {
-                DrawTrajectory.Instance.UpdateTrajectory(forceV, rb, transform.position);
-            }
-        }
-
-        if (Input.GetButtonUp("Fire1"))
-        {
-            testText3.text = "fire3";
-            Debug.Log("PHASE 3");
-            DrawTrajectory.Instance.HideLine();
-            DoMouseUpFuntions();
-        }
-    }
-
-    private void OnMouseDown()
-    {
-        Debug.Log("MOUSE PHASE 1");
-        testText4.text = "mDown";
-        mousePressDownPos = Input.mousePosition;
-        anim.SetBool("isStandToCover", false);
-        
-        StartCoroutine(GameObject.FindGameObjectWithTag("Player").GetComponent<MoveToCorrectPlace>().MoveChar(throwPos));
-    }
-
-    private void OnMouseDrag()
-    {
-        anim.SetBool("isThrow", true);
-        Debug.Log("MOUSE PHASE 2");
-        testText5.text = "mDrag";
-        Vector3 forceInit = (Input.mousePosition - mousePressDownPos);
-        Vector3 forceV = (new Vector3(forceInit.x, forceInit.y, forceInit.y)) * force;
-
-        //Debug.Log("forceV: " + forceV);
-
-        if (!isShoot)
-        {
-            DrawTrajectory.Instance.UpdateTrajectory(forceV, rb, transform.position);
-        }
-    }
-    
-    private void OnMouseUp()
-    {
-        anim.SetBool("isThrow", false);
-        anim.SetBool("isStandToCover", true);
-        testText6.text = "mUp";
-        StartCoroutine(GameObject.FindGameObjectWithTag("Player").GetComponent<MoveToCorrectPlace>().MoveChar(coverPos));
-        Debug.Log("MOUSE PHASE 3");
-        DrawTrajectory.Instance.HideLine();
-        DoMouseUpFuntions();
-    }*/
-
     void DoMouseUpFuntions()
     {
         Vector3 vectorF = new Vector3();
@@ -194,12 +105,10 @@ public class DragAndShoot : MonoBehaviour
 
         if (mousePressDownPos.y - mouseReleasePos.y <= 0)
         {
-            Debug.Log("Küçüktür");
             vectorF = mouseReleasePos - mousePressDownPos;
         }
         else if (mousePressDownPos.y - mouseReleasePos.y > 0)
         {
-            Debug.Log("Büyüktür");
             vectorF = mousePressDownPos - mouseReleasePos;
         }
 
@@ -216,6 +125,13 @@ public class DragAndShoot : MonoBehaviour
         rb.useGravity = true;
         rb.AddForce(new Vector3(Force.x, Force.y, Force.y) * force);
         isShoot = true;
+        StartCoroutine(BallLifeTime(4f));
         GameManager.Instance.NewSpawnRequest();
+    }
+
+    private IEnumerator BallLifeTime(float lifeTime)
+    {
+        yield return new WaitForSeconds(lifeTime);
+        Destroy(gameObject);
     }
 }

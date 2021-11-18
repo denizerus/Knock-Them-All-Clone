@@ -4,22 +4,7 @@ using UnityEngine;
 
 public class MoveToCorrectPlace : MonoBehaviour
 {
-
     public float duration = 1;
-
-
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
 
     public IEnumerator MoveChar(Transform target)
     {
@@ -37,6 +22,4 @@ public class MoveToCorrectPlace : MonoBehaviour
         transform.rotation = target.rotation;
         transform.position = target.position;
     }
-
-
 }

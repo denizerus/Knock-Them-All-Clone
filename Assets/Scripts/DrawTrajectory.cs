@@ -29,7 +29,7 @@ public class DrawTrajectory : MonoBehaviour
 
         float FlightDurationToGround = Mathf.Sqrt((velocity.y * velocity.y) / (Physics.gravity.y * Physics.gravity.y) - (2 * startingPoint.y / Physics.gravity.y));
 
-        float FlightDuration = ((2 * velocity.y) / Physics.gravity.y) - FlightDurationToGround;
+        float FlightDuration = ((2 * velocity.y) / Physics.gravity.y) + FlightDurationToGround;
 
         float stepTime = (FlightDuration / lineSegmentCount);
         linePoints.Clear();
@@ -53,7 +53,7 @@ public class DrawTrajectory : MonoBehaviour
             linePoints.Add(-MovementVector + startingPoint);
         }
 
-        Vector3 secondBouncingStartPoint = linePoints[linePoints.Count-1];
+        Vector3 secondBouncingStartPoint = linePoints[linePoints.Count - 1];
         /////// SECOND BOUNCING
 
         for (int i = 0; i < lineSegmentCount; i++)

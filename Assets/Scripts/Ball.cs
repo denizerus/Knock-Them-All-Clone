@@ -27,7 +27,7 @@ public class Ball : MonoBehaviour
         foreach (Collider nearby in colliders)
         {
             Rigidbody rig = nearby.GetComponent<Rigidbody>();
-            if (rig != null &&  nearby.transform.tag != "Ball" )
+            if (rig != null && nearby.transform.tag != "Ball")
             {
                 rig.AddExplosionForce(expForce, transform.position, radius);
             }

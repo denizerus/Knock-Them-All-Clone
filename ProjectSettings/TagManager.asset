@@ -14,6 +14,8 @@ TagManager:
   - Text6
   - Enemy
   - LevelManager
+  - EnemyBall
+  - PlayerHitBox
   layers:
   - Default
   - TransparentFX

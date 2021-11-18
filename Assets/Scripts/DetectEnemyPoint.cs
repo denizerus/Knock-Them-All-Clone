@@ -15,6 +15,7 @@ public class DetectEnemyPoint : MonoBehaviour
             EnemyThrowBall etb = gameObject.transform.parent.gameObject.transform.Find("EnemyModel").GetComponent<EnemyThrowBall>();
             etb.StopAllCoroutines();
             etb.enabled = false;
+            StartCoroutine(FadeOutAndDestroy(1f));
         }
     }
 
@@ -24,7 +25,13 @@ public class DetectEnemyPoint : MonoBehaviour
         {
             rig = gameObject.transform.parent.gameObject.transform.Find("EnemyModel").GetComponent<Rigidbody>();
             rig.AddForce(new Vector3(0, 500f, 0));
+            StartCoroutine(FadeOutAndDestroy(1f));
         }
     }
 
+    IEnumerator FadeOutAndDestroy(float time)
+    {
+        yield return new WaitForSeconds(2f); ;
+        Destroy(gameObject.transform.parent.gameObject);
+    }
 }
