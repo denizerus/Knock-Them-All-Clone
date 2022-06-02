@@ -7,6 +7,7 @@ using Random = UnityEngine.Random;
 
 public class LevelManager : MonoBehaviour
 {
+    //comment line
     public GameObject[] enemyPrefab;
     public int numOfEnemy;
     public bool isLevelCreated;
